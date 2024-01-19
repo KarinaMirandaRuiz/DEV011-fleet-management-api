@@ -11,15 +11,17 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "trajectories")
-public class Trajectories implements Serializable {
+public class TrajectoryEntity implements Serializable {
     @Id
 
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(name = "taxi_id")
-    private Integer taxi_id;
+
+    @ManyToOne
+    @JoinColumn(name = "taxi_id", referencedColumnName = "id")
+    private TaxiEntity taxi;
 
     @Column(name = "date")
     private Timestamp date;
