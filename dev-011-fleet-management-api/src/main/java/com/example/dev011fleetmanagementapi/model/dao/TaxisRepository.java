@@ -9,3 +9,10 @@ import org.springframework.data.repository.CrudRepository;  //jpa repository
 //@repository
 public interface TaxisRepository extends JpaRepository<TaxiEntity, Integer> {
 }
+
+
+// Opcional: duplicar repositprio con atributo de array y definir los métodos de forma manual
+
+//conección a DB archivo sql lite .db
+
+//mock de métodos

@@ -19,6 +19,10 @@ public class TaxiImpl implements ITaxi {
 
     @Autowired
     private TaxisRepository taxisRepository;
+
+    //public TaxiImpl(TaxisRepository taxisRepository) {
+    //    this.taxisRepository = taxisRepository;
+    //}
     //private TaxiEntity taxiDto;
 
     @Transactional(readOnly = true)
