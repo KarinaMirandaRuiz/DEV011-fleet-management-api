@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -82,34 +83,34 @@ class TaxiControllerTest {
 
     @Test
     @DisplayName("{POST}:/taxi")
-    void post() throws Exception{
-//
-//        //Seteo del mock de 'taxisRepository.save' cuando sea llamado con algún taxi
-//        when(taxisRepository.save(any(TaxiEntity.class)))
-//                .thenReturn(newTaxi1);
-//        String requestBody = new ObjectMapper().writeValueAsString(newTaxi1);
-//        // String requestBody = "{\"id\":2, \"plate\":\"xxxx-2222\"}";
-//        mockMvc.perform(post("/api/v1/taxi")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(requestBody))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content.length()").value(2));
+    void postTaxi() throws Exception{
+
+        //Seteo del mock de 'taxisRepository.save' cuando sea llamado con algún taxi
+        when(taxisRepository.save(any(TaxiEntity.class)))
+                .thenReturn(newTaxi0);
+        String requestBody = new ObjectMapper().writeValueAsString(newTaxi0);
+        // String requestBody = "{\"id\":2, \"plate\":\"xxxx-2222\"}";
+        mockMvc.perform(post(URI.create("/api/v1/taxi"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.plate").value("xxxx-0000"));
     }
 
     @Test
     @DisplayName("{PUT}:/taxi")
-    void put() throws Exception{
+    void putTaxi() throws Exception{
 
-//        //Seteo del mock de 'taxisRepository.save' cuando sea llamado con algún taxi
-//        when(taxisRepository.save(any(TaxiEntity.class)))
-//                .thenReturn(newTaxi1);
-//        String requestBody = new ObjectMapper().writeValueAsString(newTaxi1);
-//        // String requestBody = "{\"id\":2, \"plate\":\"xxxx-2222\"}";
-//        mockMvc.perform(post("/api/v1/taxi")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(requestBody))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content.length()").value(2));
+        //Seteo del mock de 'taxisRepository.save' cuando sea llamado con algún taxi
+        when(taxisRepository.save(any(TaxiEntity.class)))
+                .thenReturn(newTaxi1);
+        String requestBody = new ObjectMapper().writeValueAsString(newTaxi1);
+        // String requestBody = "{\"id\":2, \"plate\":\"xxxx-2222\"}";
+        mockMvc.perform(post("/api/v1/taxi")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.plate").value("yyyy-1111"));
     }
 
     @Test
