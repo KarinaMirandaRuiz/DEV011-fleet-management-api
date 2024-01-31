@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.1.1 - 2024-01-31
+
+### Sprint learnings
+
+- Test de integración usando Contenedores de Docker
+- Test de mediante mock del  repositorio
+
+### Added
+
+- Agregación de endpoint que trae todas las últimas trayectorias de todos los taxis
+- Test de integración del controllador de Trayectorias, usando Contenedores de Docker
+- Test de taxis mediante mock del  repositorio
+
+
+### Fixed
+
+- Los tests anteriores
+
+
 ## 2.0.0 - 2024-01-24
 
 ### Sprint learnings
