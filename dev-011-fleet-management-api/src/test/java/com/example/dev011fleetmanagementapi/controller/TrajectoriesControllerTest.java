@@ -6,6 +6,7 @@ import com.example.dev011fleetmanagementapi.model.entity.TaxiEntity;
 import com.example.dev011fleetmanagementapi.model.entity.TrajectoryEntity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -80,8 +81,9 @@ class TrajectoriesControllerTest {
     private TrajectoryEntity newTrajectory2 = new TrajectoryEntity(2,newTaxi, Timestamp.valueOf("2008-02-02 14:22:45"),39.96505, 116.30568);
 
     @Test
+    @DisplayName("{GET}:/trajectories?page=0&pageSize=10")
     void getAll() throws Exception {
-        mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=2"))
+        mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
 
         taxisRepository.save(newTaxi);
@@ -95,7 +97,40 @@ class TrajectoriesControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    @DisplayName("{GET}:/trajectories-by-taxi?idTaxi=1&page=0&pageSize=10")
+    void getTrajectoriesByTaxi() throws Exception {
+        mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
+                .andExpect(jsonPath("$.content").isEmpty());
+
+        taxisRepository.save(newTaxi);
+        trajectoriesRepository.save(newTrajectory0);
+        trajectoriesRepository.save(newTrajectory2);
+
+        mockMvc.perform(get("/api/v1/trajectories-by-taxi?idTaxi=1&page=0&pageSize=10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(2));
+    }
+
+    @Test
+    @DisplayName("{GET}:/last-trajectory?idTaxi=1")
+    void getLastTrajectory() throws Exception{
+        mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
+                .andExpect(jsonPath("$.content").isEmpty());
+
+        taxisRepository.save(newTaxi);
+        trajectoriesRepository.save(newTrajectory0);
+        trajectoriesRepository.save(newTrajectory2);
+
+        mockMvc.perform(get("/api/v1/last-trajectory?idTaxi=1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].id").value(2))
+                .andExpect(jsonPath("$.content[0].date").value("2008-02-02T20:22:45.000+00:00"));
+    }
+
+    @Test
+    @DisplayName("{GET}:/trajectory?id=0")
+    void getTrajectoryById() throws Exception {
         mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
 
@@ -107,6 +142,7 @@ class TrajectoriesControllerTest {
     }
 
     @Test
+    @DisplayName("{POST}:/trajectory")
     void create() throws Exception {
         mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
@@ -122,6 +158,7 @@ class TrajectoriesControllerTest {
     }
 
     @Test
+    @DisplayName("{PUT}:/trajectory")
     void update() throws Exception {
         mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
@@ -142,6 +179,7 @@ class TrajectoriesControllerTest {
     }
 
     @Test
+    @DisplayName("{DELETE}:/trajectory")
     void delete() throws Exception {
         mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
