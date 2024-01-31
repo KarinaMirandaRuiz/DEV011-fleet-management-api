@@ -168,4 +168,19 @@ public class TrajectoriesController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("last-trajectories")
+    @Operation(summary = "Get last trajectories",
+            description = "idTaxi must exists as a query param")
+    public ResponseEntity<?> getAllLast(@RequestParam Integer page, @RequestParam Integer pageSize){
+        Map<String,Object> response = new HashMap<>();
+        try{
+            Iterable<TrajectoryEntity> trajectory = iTrajectoriesService.getAllLastTrajectories(page,pageSize);
+            return new ResponseEntity<>(trajectory, HttpStatus.OK);
+        } catch (Error er){
+            response.put("mensaje", er.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.dev011fleetmanagementapi.service;
 
 import com.example.dev011fleetmanagementapi.model.entity.TaxiEntity;
 import com.example.dev011fleetmanagementapi.model.entity.TrajectoryEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 
@@ -19,4 +20,6 @@ public interface ITrajectory {
     TrajectoryEntity deleteOneTrajectoryById(Integer id) throws SQLException;
 
     Iterable<TrajectoryEntity> deleteTrajectoriesByTaxiId(Integer id) throws SQLException;
+
+    Iterable<TrajectoryEntity> getAllLastTrajectories(Integer page, Integer pageSize);
 }
