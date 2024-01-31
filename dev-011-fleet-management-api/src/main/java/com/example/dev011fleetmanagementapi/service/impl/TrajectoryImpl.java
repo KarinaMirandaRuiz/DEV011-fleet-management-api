@@ -139,4 +139,13 @@ public class TrajectoryImpl implements ITrajectory {
         }
 
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Iterable<TrajectoryEntity> getAllLastTrajectories(Integer page, Integer pageSize) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "date");
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+        return trajectoriesRepository.findLastTrajectory(pageable);
+    }
+
 }

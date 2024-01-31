@@ -75,10 +75,13 @@ class TrajectoriesControllerTest {
 
 
     private TaxiEntity newTaxi = new TaxiEntity(1,"xxxx-0000");
+    private TaxiEntity newTaxi2 = new TaxiEntity(2,"yyyy-1111");
 
     private TrajectoryEntity newTrajectory0 = new TrajectoryEntity(0,newTaxi, Timestamp.valueOf("2008-02-02 14:22:40"),39.96525, 116.30508);
     private TrajectoryEntity newTrajectoryUpdated = new TrajectoryEntity(0,newTaxi, Timestamp.valueOf("2008-02-02 14:22:40"), 0.0,0.0);
     private TrajectoryEntity newTrajectory2 = new TrajectoryEntity(2,newTaxi, Timestamp.valueOf("2008-02-02 14:22:45"),39.96505, 116.30568);
+    private TrajectoryEntity newTrajectory3 = new TrajectoryEntity(3,newTaxi2, Timestamp.valueOf("2008-03-02 14:22:45"),39.96505, 116.30568);
+    private TrajectoryEntity newTrajectory4 = new TrajectoryEntity(4,newTaxi2, Timestamp.valueOf("2008-03-02 16:22:45"),39.96505, 116.30568);
 
     @Test
     @DisplayName("{GET}:/trajectories?page=0&pageSize=10")
@@ -113,7 +116,7 @@ class TrajectoriesControllerTest {
 
     @Test
     @DisplayName("{GET}:/last-trajectory?idTaxi=1")
-    void getLastTrajectory() throws Exception{
+    void getLastTrajectoryByTaxi() throws Exception{
         mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
                 .andExpect(jsonPath("$.content").isEmpty());
 
@@ -193,4 +196,26 @@ class TrajectoriesControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/trajectory?id=2"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @DisplayName("{GET}:/last-trajectories?page=0&pageSize=10")
+    void getAllLastTrajectories() throws Exception {
+        mockMvc.perform(get("/api/v1/trajectories?page=0&pageSize=10"))
+                .andExpect(jsonPath("$.content").isEmpty());
+
+        taxisRepository.save(newTaxi);
+        taxisRepository.save(newTaxi2);
+        trajectoriesRepository.save(newTrajectory0);
+        trajectoriesRepository.save(newTrajectory2);
+        trajectoriesRepository.save(newTrajectory3);
+        trajectoriesRepository.save(newTrajectory4);
+
+        mockMvc.perform(get("/api/v1/last-trajectories?page=0&pageSize=10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(4))
+                .andExpect(jsonPath("$[1].id").value(2));
+
+    }
+
+
 }
